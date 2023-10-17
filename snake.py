@@ -18,6 +18,11 @@ class Snake():
 
     def update(self) -> None:
         self.points.pop()
+        point = self._move_snake()
+        
+        self.points.insert(0, point)
+
+    def _move_snake(self) -> Point:
         point: Optional[Point] = None
         head = self.points[0]
         if self.direction == Direction.UP:
@@ -30,7 +35,7 @@ class Snake():
             point = Point(head.x + self.speed, head.y)
         
         assert point is not None, f"Point object cannot be none"
-        self.points.insert(0, point)
+        return point
 
     def draw(self, surf: pygame.Surface):
         for p in self.points:

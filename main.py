@@ -18,13 +18,17 @@ if __name__ == "__main__":
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    snake.direction = c.Direction.UP
+                    if snake.direction != c.Direction.DOWN:
+                        snake.direction = c.Direction.UP
                 if event.key == pygame.K_DOWN:
-                    snake.direction = c.Direction.DOWN
+                    if snake.direction != c.Direction.UP:
+                        snake.direction = c.Direction.DOWN
                 if event.key == pygame.K_LEFT:
-                    snake.direction = c.Direction.LEFT
+                    if snake.direction != c.Direction.RIGHT:
+                        snake.direction = c.Direction.LEFT
                 if event.key == pygame.K_RIGHT:
-                    snake.direction = c.Direction.RIGHT
+                    if snake.direction != c.Direction.LEFT:
+                        snake.direction = c.Direction.RIGHT
 
         screen.fill((0, 0, 0))
         snake.update()
