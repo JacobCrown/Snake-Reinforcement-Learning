@@ -5,6 +5,8 @@ import enum
 
 WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 500
+BLOCK_SIZE = 20
+SNAKE_COLOR = (0, 240, 0)
 
 class Direction(enum.Enum):
     UP = 0

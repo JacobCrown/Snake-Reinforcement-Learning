@@ -8,8 +8,6 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
     pygame.display.set_caption('Snake Reinforcement Learning')
     snake = Snake()
-    group = pygame.sprite.Group()
-    group.add(snake)
     
     running = True
     clock = pygame.time.Clock()
@@ -18,8 +16,18 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    snake.direction = c.Direction.UP
+                if event.key == pygame.K_DOWN:
+                    snake.direction = c.Direction.DOWN
+                if event.key == pygame.K_LEFT:
+                    snake.direction = c.Direction.LEFT
+                if event.key == pygame.K_RIGHT:
+                    snake.direction = c.Direction.RIGHT
+
         screen.fill((0, 0, 0))
-        group.update()
-        group.draw(screen)
+        snake.update()
+        snake.draw(screen)
         pygame.display.update()
-        clock.tick(30)
+        clock.tick(10)
