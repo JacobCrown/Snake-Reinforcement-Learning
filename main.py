@@ -33,5 +33,6 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         snake.update()
         snake.draw(screen)
+        running = not snake.check_for_collision()
         pygame.display.update()
         clock.tick(10)

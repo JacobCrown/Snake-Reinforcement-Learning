@@ -41,4 +41,17 @@ class Snake():
         for p in self.points:
             pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE), 2)
             
+    def check_for_collision(self) -> bool:
+        head = self.points[0]
+        x, y = head.x, head.y
+        if x < 0 or x >= WINDOW_WIDTH:
+            return True
+        elif y < 0 or y >= WINDOW_HEIGHT:
+            return True
         
+        # check if snake touches itself
+        for p in self.points[1:]:
+            if x == p.x and y == p.y:
+                return True
+
+        return False
