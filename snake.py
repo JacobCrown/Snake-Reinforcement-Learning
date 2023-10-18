@@ -1,11 +1,11 @@
-from collections import namedtuple
 from typing import Optional
 
 import pygame
 
-from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_COLOR
+from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
+                      Point
 
-Point = namedtuple("Point", ("x", "y"))
+
 
 
 class Snake():
