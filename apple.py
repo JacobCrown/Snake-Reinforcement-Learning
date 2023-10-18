@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from constants import WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_COLOR, APPLE_COLOR
+from constants import WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, APPLE_COLOR
 
 
 class Apple():
