@@ -21,17 +21,18 @@ class Snake():
         point = self._move_snake()
         
         self.points.insert(0, point)
+        self.head = point
 
     def _move_snake(self) -> Point:
         point: Optional[Point] = None
         self.head = self.points[0]
         if self.direction == Direction.UP:
             point = Point(self.head.x, self.head.y - self.speed)
-        if self.direction == Direction.DOWN:
+        elif self.direction == Direction.DOWN:
             point = Point(self.head.x, self.head.y + self.speed)
-        if self.direction == Direction.LEFT:
+        elif self.direction == Direction.LEFT:
             point = Point(self.head.x - self.speed, self.head.y)
-        if self.direction == Direction.RIGHT:
+        else:
             point = Point(self.head.x + self.speed, self.head.y)
         
         assert point is not None, f"Point object cannot be none"
