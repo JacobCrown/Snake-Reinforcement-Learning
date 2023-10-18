@@ -6,8 +6,6 @@ from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_
                       Point
 
 
-
-
 class Snake():
     def __init__(self):
         self.direction = Direction.UP
@@ -15,6 +13,7 @@ class Snake():
         self.points = [Point(half_w, half_h), Point(half_w - BLOCK_SIZE, half_h),
                        Point(half_w - 2*BLOCK_SIZE, half_h)]
         self.speed = BLOCK_SIZE
+        self.head = self.points[0]
 
     def update(self) -> None:
         self.points.pop()
@@ -24,15 +23,15 @@ class Snake():
 
     def _move_snake(self) -> Point:
         point: Optional[Point] = None
-        head = self.points[0]
+        self.head = self.points[0]
         if self.direction == Direction.UP:
-            point = Point(head.x, head.y - self.speed)
+            point = Point(self.head.x, self.head.y - self.speed)
         if self.direction == Direction.DOWN:
-            point = Point(head.x, head.y + self.speed)
+            point = Point(self.head.x, self.head.y + self.speed)
         if self.direction == Direction.LEFT:
-            point = Point(head.x - self.speed, head.y)
+            point = Point(self.head.x - self.speed, self.head.y)
         if self.direction == Direction.RIGHT:
-            point = Point(head.x + self.speed, head.y)
+            point = Point(self.head.x + self.speed, self.head.y)
         
         assert point is not None, f"Point object cannot be none"
         return point
