@@ -14,12 +14,15 @@ class Game:
         pygame.display.set_caption('Snake Reinforcement Learning')
 
         self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
-        self.snake = Snake()
-        self.apple = Apple()
-        self.points = 0
         
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font("freesansbold.ttf", 32)
+        self.reset()
+
+    def reset(self):
+        self.snake = Snake()
+        self.apple = Apple()
+        self.points = 0
 
     def _print_points(self):
         text = self.font.render(f"Score: {self.points}",
@@ -29,7 +32,7 @@ class Game:
         text_rect.topright = (c.WINDOW_WIDTH - 50, 10)
         self.screen.blit(text, text_rect)
 
-    def _convert_move_to_direction(self, move: int):
+    def convert_move_to_direction(self, move: int):
         """`move` - 0 - left, 1 - straight, 2 - right"""
         move -= 1
         direction = self.snake.direction.value

@@ -97,8 +97,7 @@ class Agent:
         if random.randint(0, 200) < self.epsilon:
             move = random.randint(0, 2)
         else:
-            state0 = torch.tensor(state, dtype=torch.float)
-            prediction = self.model(state0)
+            prediction = self.model(state)
             move = torch.argmax(prediction).item()
 
         return int(move)
@@ -115,7 +114,7 @@ def train():
         # get move
         move = agent.get_action(state_old)
 
-        final_move = game._convert_move_to_direction(move)
+        final_move = game.convert_move_to_direction(move)
 
         # perform move and get new state
         reward, game_over, score = game.play_step(final_move)
@@ -132,6 +131,9 @@ def train():
             game = Game()
             agent.n_games += 1
             agent.train_long_memory()
+
+            if score > record:
+                record = score
 
             print('Game', agent.n_games, 'Score', score, 'Record:', record)
             time.sleep(0.1)
