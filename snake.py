@@ -41,23 +41,33 @@ class Snake():
     def draw(self, surf: pygame.Surface):
         for p in self.points:
             pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE), 2)
-            
-    def check_for_collision(self) -> bool:
-        head = self.points[0]
-        x, y = head.x, head.y
 
-        # check for collision with walls
+    def _check_collision_with_walls(self, x: int, y: int) -> bool:
         if x < 0 or x >= WINDOW_WIDTH:
             return True
         elif y < 0 or y >= WINDOW_HEIGHT:
             return True
-        
-        # check if snake touches itself
+        return False
+
+    def _check_collision_with_tail(self, x, y) -> bool:
         for p in self.points[1:]:
             if x == p.x and y == p.y:
                 return True
-
         return False
+
+    def _check_collision(self, x, y) -> bool:
+        if self._check_collision_with_walls(x, y):
+            return True
+        if self._check_collision_with_tail(x, y):
+            return True
+        return False
+
+    def is_collision(self, point: Point) -> bool:
+        return self._check_collision(point.x, point.y)
+            
+    def check_for_collision(self) -> bool:
+        x, y = self.head.x, self.head.y
+        return self._check_collision(x, y)
 
     def _grow(self):
         # simply append new point at the end, since last point is just popped
