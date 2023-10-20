@@ -1,7 +1,9 @@
+from collections import deque
+import time
+
 import torch
 import random
-import numpy as np
-from collections import deque
+
 from game import Game
 from constants import Direction, Point
 from model import Linear_QNet, QTrainer
@@ -16,7 +18,7 @@ class Agent:
         self.epsilon = 0 
         self.gamma = 0.9 
         self.memory = deque(maxlen=MAX_MEMORY)
-        self.model = Linear_QNet(12, 112, 4)
+        self.model = Linear_QNet(12, 256, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
 
@@ -88,18 +90,18 @@ class Agent:
         
         self.trainer.train_step(state_t, action_t, reward_t, next_state_t, game_over_t)
 
-    def get_action(self, state) -> Direction:
+    def get_action(self, state) -> int:
         # random moves: tradeoff exploration / exploitation
         self.epsilon = 80 - self.n_games
-        move = 0
+        move = 0 # 0 - left, 1 - straight, 2 - right
         if random.randint(0, 200) < self.epsilon:
-            move = random.randint(0, 3)
+            move = random.randint(0, 2)
         else:
             state0 = torch.tensor(state, dtype=torch.float)
             prediction = self.model(state0)
             move = torch.argmax(prediction).item()
 
-        return Direction(move)
+        return int(move)
 
 
 def train():
@@ -111,7 +113,9 @@ def train():
         state_old = agent.get_state(game)
 
         # get move
-        final_move = agent.get_action(state_old)
+        move = agent.get_action(state_old)
+
+        final_move = game._convert_move_to_direction(move)
 
         # perform move and get new state
         reward, game_over, score = game.play_step(final_move)
@@ -130,6 +134,7 @@ def train():
             agent.train_long_memory()
 
             print('Game', agent.n_games, 'Score', score, 'Record:', record)
+            time.sleep(0.1)
 
 if __name__ == '__main__':
     train()

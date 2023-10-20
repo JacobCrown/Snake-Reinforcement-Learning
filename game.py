@@ -29,6 +29,14 @@ class Game:
         text_rect.topright = (c.WINDOW_WIDTH - 50, 10)
         self.screen.blit(text, text_rect)
 
+    def _convert_move_to_direction(self, move: int):
+        """`move` - 0 - left, 1 - straight, 2 - right"""
+        move -= 1
+        direction = self.snake.direction.value
+        direction += move + 4
+        direction %= 4
+        return c.Direction(direction)
+
     def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
         reward = 0
         game_over = False
@@ -42,6 +50,7 @@ class Game:
         self.apple.draw(self.screen)
         self.snake.draw(self.screen)
         if self.snake.has_eaten(self.apple):
+            print("Reward:", reward)
             reward = 10
             self.points += 1
         pygame.display.update()
