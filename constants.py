@@ -9,6 +9,8 @@ WINDOW_HEIGHT = 800
 BLOCK_SIZE = 20
 SNAKE_COLOR = (0, 240, 0)
 APPLE_COLOR = (240, 0, 0)
+BACKGROUND_COLOR = (0, 0, 0)
+TEXT_COLOR = (0, 0, 240)
 
 Point = namedtuple("Point", ("x", "y"))
 

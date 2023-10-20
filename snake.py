@@ -63,7 +63,9 @@ class Snake():
         # simply append new point at the end, since last point is just popped
         self.points.append(Point(x=1, y=1))
 
-    def has_eaten(self, apple: Apple):
+    def has_eaten(self, apple: Apple) -> bool:
         if apple.x == self.head.x and apple.y == self.head.y:
             self._grow()
             apple.reset_apple()
+            return True
+        return False

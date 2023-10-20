@@ -13,10 +13,22 @@ class Game:
         self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
         self.snake = Snake()
         self.apple = Apple()
+        self.points = 0
         
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font("freesansbold.ttf", 32)
 
         self.main_loop()
+
+
+    def _print_points(self):
+        text = self.font.render(f"Score: {self.points}",
+                                True, c.TEXT_COLOR, c.BACKGROUND_COLOR)
+        text_rect = text.get_rect()
+        
+        text_rect.topright = (c.WINDOW_WIDTH - 50, 10)
+        self.screen.blit(text, text_rect)
+
 
     def main_loop(self):
         direction = self.snake.direction
@@ -39,12 +51,14 @@ class Game:
                             direction = c.Direction.RIGHT
             
             self.snake.direction = direction
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(c.BACKGROUND_COLOR)
             self.snake.update()
             if self.snake.check_for_collision():
                 break
+            self._print_points()
             self.apple.draw(self.screen)
             self.snake.draw(self.screen)
-            self.snake.has_eaten(self.apple)
+            if self.snake.has_eaten(self.apple):
+                self.points += 1
             pygame.display.update()
             self.clock.tick(10)
