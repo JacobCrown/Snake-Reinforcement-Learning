@@ -2,4 +2,5 @@ from game import Game
 
 
 if __name__ == "__main__":
-    Game()
+    Game().main_loop()
+    

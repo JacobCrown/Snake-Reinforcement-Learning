@@ -1,3 +1,6 @@
+import sys
+from typing import Tuple
+
 import pygame
 
 import constants as c
@@ -18,9 +21,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font("freesansbold.ttf", 32)
 
-        self.main_loop()
-
-
     def _print_points(self):
         text = self.font.render(f"Score: {self.points}",
                                 True, c.TEXT_COLOR, c.BACKGROUND_COLOR)
@@ -28,6 +28,26 @@ class Game:
         
         text_rect.topright = (c.WINDOW_WIDTH - 50, 10)
         self.screen.blit(text, text_rect)
+
+    def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
+        reward = 0
+        game_over = False
+        self.snake.direction = direction
+        self.screen.fill(c.BACKGROUND_COLOR)
+        self.snake.update()
+        if self.snake.check_for_collision():
+            reward = -100
+            game_over = True
+        self._print_points()
+        self.apple.draw(self.screen)
+        self.snake.draw(self.screen)
+        if self.snake.has_eaten(self.apple):
+            reward = 10
+            self.points += 1
+        pygame.display.update()
+        self.clock.tick(10)
+        
+        return reward, game_over, self.points
 
 
     def main_loop(self):
@@ -49,16 +69,10 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         if self.snake.direction != c.Direction.LEFT:
                             direction = c.Direction.RIGHT
+                    if event.key == pygame.K_q:
+                        pygame.quit()
+                        sys.exit()
             
-            self.snake.direction = direction
-            self.screen.fill(c.BACKGROUND_COLOR)
-            self.snake.update()
-            if self.snake.check_for_collision():
+            _, game_over, _ = self.play_step(direction)
+            if game_over:
                 break
-            self._print_points()
-            self.apple.draw(self.screen)
-            self.snake.draw(self.screen)
-            if self.snake.has_eaten(self.apple):
-                self.points += 1
-            pygame.display.update()
-            self.clock.tick(10)
