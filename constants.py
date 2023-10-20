@@ -11,7 +11,7 @@ SNAKE_COLOR = (0, 240, 0)
 APPLE_COLOR = (240, 0, 0)
 BACKGROUND_COLOR = (0, 0, 0)
 TEXT_COLOR = (0, 0, 240)
-FPS = 30
+FPS = 15
 
 Point = namedtuple("Point", ("x", "y"))
 

@@ -9,7 +9,7 @@ from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_
 
 class Snake():
     def __init__(self):
-        self.direction = Direction.UP
+        self.direction = Direction.RIGHT
         half_w, half_h = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2
         self.points = [Point(half_w, half_h), Point(half_w - BLOCK_SIZE, half_h),
                        Point(half_w - 2*BLOCK_SIZE, half_h)]

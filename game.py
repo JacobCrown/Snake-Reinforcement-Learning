@@ -32,13 +32,22 @@ class Game:
         text_rect.topright = (c.WINDOW_WIDTH - 50, 10)
         self.screen.blit(text, text_rect)
 
+    def _change_direction_from_int(self, move: int):
+        dir = self.snake.direction
+        value: int
+        if move < 0:
+            value = 3 if dir.value == 0 else dir.value + move
+        elif move > 0:
+            value = 0 if dir.value == 3 else dir.value + move
+        else:
+            value = dir.value
+        return c.Direction(value)
+
     def convert_move_to_direction(self, move: int):
         """`move` - 0 - left, 1 - straight, 2 - right"""
         move -= 1
-        direction = self.snake.direction.value
-        direction += move + 4
-        direction %= 4
-        return c.Direction(direction)
+        direction = self._change_direction_from_int(move)
+        return direction
 
     def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
         reward = 0
@@ -47,7 +56,7 @@ class Game:
         self.screen.fill(c.BACKGROUND_COLOR)
         self.snake.update()
         if self.snake.check_for_collision():
-            reward = -100
+            reward = -10
             game_over = True
         self._print_points()
         self.apple.draw(self.screen)

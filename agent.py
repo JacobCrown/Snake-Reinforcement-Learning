@@ -136,7 +136,7 @@ def train():
                 record = score
 
             print('Game', agent.n_games, 'Score', score, 'Record:', record)
-            time.sleep(0.1)
+            time.sleep(0.3)
 
 if __name__ == '__main__':
     train()
