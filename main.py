@@ -11,14 +11,13 @@ if __name__ == "__main__":
     snake = Snake()
     apple = Apple()
     
-    running = True
     clock = pygame.time.Clock()
     direction = snake.direction
     
-    while running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                break
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     if snake.direction != c.Direction.DOWN:
@@ -36,9 +35,10 @@ if __name__ == "__main__":
         snake.direction = direction
         screen.fill((0, 0, 0))
         snake.update()
+        if snake.check_for_collision():
+            break
         apple.draw(screen)
         snake.draw(screen)
         snake.has_eaten(apple)
-        running = not snake.check_for_collision()
         pygame.display.update()
         clock.tick(10)
