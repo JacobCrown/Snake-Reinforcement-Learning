@@ -45,7 +45,7 @@ class Game:
             reward = 10
             self.points += 1
         pygame.display.update()
-        self.clock.tick(10)
+        self.clock.tick(c.FPS)
         
         return reward, game_over, self.points
 
