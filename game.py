@@ -58,6 +58,10 @@ class Game:
         if self.snake.check_for_collision():
             reward = -10
             game_over = True
+        if self.snake.total_moves > 100:
+            reward = -10
+            game_over = True
+            
         self._print_points()
         self.apple.draw(self.screen)
         self.snake.draw(self.screen)

@@ -15,6 +15,7 @@ class Snake():
                        Point(half_w - 2*BLOCK_SIZE, half_h)]
         self.speed = BLOCK_SIZE
         self.head = self.points[0]
+        self.total_moves = 0
 
     def update(self) -> None:
         self.points.pop()
@@ -36,6 +37,7 @@ class Snake():
             point = Point(self.head.x + self.speed, self.head.y)
         
         assert point is not None, f"Point object cannot be none"
+        self.total_moves += 1
         return point
 
     def draw(self, surf: pygame.Surface):
@@ -76,6 +78,7 @@ class Snake():
     def has_eaten(self, apple: Apple) -> bool:
         if apple.x == self.head.x and apple.y == self.head.y:
             self._grow()
+            self.total_moves = 0
             apple.reset_apple()
             return True
         return False

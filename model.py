@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -26,20 +27,16 @@ class QTrainer:
         self.criterion = nn.MSELoss()
 
     def train_step(self, state, action, reward, next_state, game_over):
-        # 1: predicted Q values with current state
-        pred = self.model(state)
-
-        target = pred.clone()
-        for idx, go in enumerate(game_over):
-            Q_new = reward[idx]
-            if not go:
-                Q_new = reward[idx] + self.gamma * torch.max(self.model(next_state[idx]))
-
-            target[idx][torch.argmax(action[idx]).item()] = Q_new
-    
         self.optimizer.zero_grad()
-        loss = self.criterion(target, pred)
-        loss.backward()
-        # print("Loss:", loss.item())
 
+        batch_index = np.arange(state, dtype=np.int32)
+
+        q_eval = self.model(state)[batch_index, action]
+        q_next = self.model(next_state)
+        q_next[game_over] = 0.0
+
+        target = reward + self.gamma * torch.max(q_next, dim=1)
+    
+        loss = self.criterion(target, q_eval)
+        loss.backward()
         self.optimizer.step()
