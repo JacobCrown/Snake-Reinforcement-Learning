@@ -7,7 +7,7 @@ from constants import Direction, Point
 from model import Linear_QNet, QTrainer
 
 MAX_MEMORY = 100_000
-BATCH_SIZE = 100
+BATCH_SIZE = 1000
 LR = 0.001
 
 class Agent:
@@ -95,7 +95,7 @@ class Agent:
 
     def get_action(self, state) -> int:
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 120 - self.n_games
+        self.epsilon = 200 - self.n_games
         move = 0 # 0 - left, 1 - straight, 2 - right
         if random.randint(0, 200) < self.epsilon:
             move = random.randint(0, 2)

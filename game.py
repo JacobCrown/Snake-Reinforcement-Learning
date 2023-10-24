@@ -17,12 +17,14 @@ class Game:
         
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font("freesansbold.ttf", 32)
+        self.stale_moves_threshold = 98
         self.reset()
 
     def reset(self):
         self.snake = Snake()
         self.apple = Apple()
         self.points = 0
+        self.stale_moves_threshold += 2
 
     def _print_points(self):
         text = self.font.render(f"Score: {self.points}",
@@ -58,7 +60,7 @@ class Game:
         if self.snake.check_for_collision():
             reward = -10
             game_over = True
-        if self.snake.total_moves > 100:
+        if self.snake.total_moves > self.stale_moves_threshold:
             reward = -10
             game_over = True
             
