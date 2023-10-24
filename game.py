@@ -17,14 +17,13 @@ class Game:
         
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font("freesansbold.ttf", 32)
-        self.stale_moves_threshold = 98
+        self.stale_moves_threshold = 150
         self.reset()
 
     def reset(self):
         self.snake = Snake()
         self.apple = Apple()
         self.points = 0
-        self.stale_moves_threshold += 2
 
     def _print_points(self):
         text = self.font.render(f"Score: {self.points}",
