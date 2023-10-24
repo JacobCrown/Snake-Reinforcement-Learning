@@ -68,7 +68,6 @@ class Game:
         self.apple.draw(self.screen)
         self.snake.draw(self.screen)
         if self.snake.has_eaten(self.apple):
-            print("Reward:", reward)
             reward = 10
             self.points += 1
         pygame.display.update()
@@ -139,6 +138,6 @@ class Game:
                         pygame.quit()
                         sys.exit()
             
-            _, game_over, _ = self.play_step(direction)
+            _, _, game_over, _ = self.play_step(direction)
             if game_over:
                 break
