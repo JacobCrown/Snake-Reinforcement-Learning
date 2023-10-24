@@ -3,7 +3,6 @@ import random
 import numpy as np
 
 from game import Game
-from constants import Direction, Point
 from model import Linear_QNet, QTrainer
 
 MAX_MEMORY = 100_000
@@ -24,48 +23,6 @@ class Agent:
         self.action_memory = np.zeros((MAX_MEMORY), dtype=np.int32)
         self.reward_memory = np.zeros((MAX_MEMORY), dtype=np.float32)
         self.terminal_memory = np.zeros((MAX_MEMORY), dtype=bool)
-
-
-    def get_state(self, game: Game):
-        snake = game.snake
-        head = snake.head
-        point_l = Point(head.x - 20, head.y)
-        point_r = Point(head.x + 20, head.y)
-        point_u = Point(head.x, head.y - 20)
-        point_d = Point(head.x, head.y + 20)
-        
-        dir_l = snake.direction == Direction.LEFT
-        dir_r = snake.direction == Direction.RIGHT
-        dir_u = snake.direction == Direction.UP
-        dir_d = snake.direction == Direction.DOWN
-
-        state = [
-            # Danger up
-            snake.is_collision(point_u),
-
-            # Danger down
-            snake.is_collision(point_d),
-
-            # Danger right
-            snake.is_collision(point_r),
-
-            # Danger left
-            snake.is_collision(point_l),
-            
-            # Move direction
-            dir_l,
-            dir_r,
-            dir_u,
-            dir_d,
-            
-            # Food location 
-            game.apple.x < head.x,  # food left
-            game.apple.x > head.x,  # food right
-            game.apple.y < head.y,  # food up
-            game.apple.y > head.y  # food down
-            ]
-
-        return np.array(state, dtype=np.float32)
 
     def remember(self, state, action, reward, next_state, game_over):
         idx = self.mem_cntr % MAX_MEMORY
@@ -111,15 +68,14 @@ def train():
     record = 0
     agent = Agent()
     game = Game()
-    state_old = agent.get_state(game)
+    state_old = game.get_current_state()
     while True:
         move = agent.get_action(state_old)
 
         final_move = game.convert_move_to_direction(move)
 
         # perform move and get new state
-        reward, game_over, score = game.play_step(final_move)
-        state_new = agent.get_state(game)
+        state_new, reward, game_over, score = game.play_step(final_move)
 
         # remember
         agent.remember(state_old, move, reward, state_new, game_over)

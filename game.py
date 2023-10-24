@@ -1,6 +1,7 @@
 import sys
 from typing import Tuple
 
+import numpy as np
 import pygame
 
 import constants as c
@@ -50,7 +51,7 @@ class Game:
         direction = self._change_direction_from_int(move)
         return direction
 
-    def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
+    def play_step(self, direction: c.Direction) -> Tuple[np.ndarray, int, bool, int]:
         reward = 0
         game_over = False
         self.snake.direction = direction
@@ -73,8 +74,47 @@ class Game:
         pygame.display.update()
         self.clock.tick(c.FPS)
         
-        return reward, game_over, self.points
+        return self.get_current_state(), reward, game_over, self.points
 
+    def get_current_state(self):
+        head = self.snake.head
+        point_l = c.Point(head.x - 20, head.y)
+        point_r = c.Point(head.x + 20, head.y)
+        point_u = c.Point(head.x, head.y - 20)
+        point_d = c.Point(head.x, head.y + 20)
+        
+        dir_l = self.snake.direction == c.Direction.LEFT
+        dir_r = self.snake.direction == c.Direction.RIGHT
+        dir_u = self.snake.direction == c.Direction.UP
+        dir_d = self.snake.direction == c.Direction.DOWN
+
+        state = [
+            # Danger up
+            self.snake.is_collision(point_u),
+
+            # Danger down
+            self.snake.is_collision(point_d),
+
+            # Danger right
+            self.snake.is_collision(point_r),
+
+            # Danger left
+            self.snake.is_collision(point_l),
+            
+            # Move direction
+            dir_l,
+            dir_r,
+            dir_u,
+            dir_d,
+            
+            # Food location 
+            self.apple.x < head.x,  # food left
+            self.apple.x > head.x,  # food right
+            self.apple.y < head.y,  # food up
+            self.apple.y > head.y  # food down
+            ]
+
+        return np.array(state, dtype=np.float32)
 
     def main_loop(self):
         direction = self.snake.direction
