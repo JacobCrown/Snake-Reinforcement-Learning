@@ -7,16 +7,16 @@ from constants import Direction, Point
 from model import Linear_QNet, QTrainer
 
 MAX_MEMORY = 100_000
-BATCH_SIZE = 1000
+BATCH_SIZE = 100
 LR = 0.001
 
 class Agent:
     def __init__(self, input_dim: int = 12):
         self.n_games = 0
         self.epsilon = 0 
-        self.gamma = 0.5 
+        self.gamma = 0.9 
         self.model = Linear_QNet(12, 512, 3)
-        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
+        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma, batch_size=BATCH_SIZE)
         self.mem_cntr = 0
 
         self.state_memory = np.zeros((MAX_MEMORY, input_dim), dtype=np.float32)
@@ -59,13 +59,13 @@ class Agent:
             dir_d,
             
             # Food location 
-            game.apple.x < snake.head.x,  # food left
-            game.apple.x > snake.head.x,  # food right
-            game.apple.y < snake.head.y,  # food up
-            game.apple.y > snake.head.y  # food down
+            game.apple.x < head.x,  # food left
+            game.apple.x > head.x,  # food right
+            game.apple.y < head.y,  # food up
+            game.apple.y > head.y  # food down
             ]
 
-        return torch.tensor(state, dtype=torch.float32).unsqueeze(0)
+        return np.array(state, dtype=np.float32)
 
     def remember(self, state, action, reward, next_state, game_over):
         idx = self.mem_cntr % MAX_MEMORY
@@ -95,12 +95,13 @@ class Agent:
 
     def get_action(self, state) -> int:
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = 120 - self.n_games
         move = 0 # 0 - left, 1 - straight, 2 - right
         if random.randint(0, 200) < self.epsilon:
             move = random.randint(0, 2)
         else:
-            prediction = self.model(state)
+            state_t = torch.tensor(state, dtype=torch.float32)
+            prediction = self.model(state_t.unsqueeze(0))
             move = int(torch.argmax(prediction).item())
 
         return move
@@ -121,7 +122,8 @@ def train():
         state_new = agent.get_state(game)
 
         # remember
-        agent.remember(state_old, final_move.value, reward, state_new, game_over)
+        agent.remember(state_old, move, reward, state_new, game_over)
+        state_old = state_new
 
         if game_over:
             # train long memory, plot result
@@ -133,7 +135,6 @@ def train():
                 record = score
 
             print('Game', agent.n_games, 'Score', score, 'Record:', record)
-            # time.sleep(0.3)
 
 if __name__ == '__main__':
     train()
