@@ -53,25 +53,32 @@ class Game:
         direction = self._change_direction_from_int(move)
         return direction
 
-    def play_step(self, direction: c.Direction) -> Tuple[np.ndarray, int, bool, int]:
-        reward = 0
-        game_over = False
+    def update_screen(self, direction: c.Direction):
         self.snake.direction = direction
         self.screen.fill(c.BACKGROUND_COLOR)
         self.snake.update()
+        self._print_points()
+        self.apple.draw(self.screen)
+        self.snake.draw(self.screen)
+
+    def play_step(self, direction: c.Direction) -> Tuple[np.ndarray, int, bool, int]:
+        reward = 0
+        game_over = False
+
+        self.update_screen(direction)
+
         if self.snake.check_for_collision():
             reward = -10
             game_over = True
+
         if self.snake.total_moves > self.stale_moves_threshold:
             reward = -10
             game_over = True
             
-        self._print_points()
-        self.apple.draw(self.screen)
-        self.snake.draw(self.screen)
         if self.snake_has_eaten():
             reward = 10
             self.points += 1
+
         pygame.display.update()
         self.clock.tick(c.FPS)
         
