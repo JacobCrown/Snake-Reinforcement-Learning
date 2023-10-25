@@ -2,7 +2,6 @@ from typing import Optional
 
 import pygame
 
-from apple import Apple
 from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
                       Point
 
@@ -71,14 +70,6 @@ class Snake():
         x, y = self.head.x, self.head.y
         return self._check_collision(x, y)
 
-    def _grow(self):
+    def grow(self):
         # simply append new point at the end, since last point is just popped
         self.points.append(Point(x=1, y=1))
-
-    def has_eaten(self, apple: Apple) -> bool:
-        if apple.x == self.head.x and apple.y == self.head.y:
-            self._grow()
-            self.total_moves = 0
-            apple.reset_apple()
-            return True
-        return False

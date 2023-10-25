@@ -1,3 +1,4 @@
+import random
 import sys
 from typing import Tuple
 
@@ -24,6 +25,7 @@ class Game:
     def reset(self):
         self.snake = Snake()
         self.apple = Apple()
+        self.reset_apple()
         self.points = 0
 
     def _print_points(self):
@@ -67,7 +69,7 @@ class Game:
         self._print_points()
         self.apple.draw(self.screen)
         self.snake.draw(self.screen)
-        if self.snake.has_eaten(self.apple):
+        if self.snake_has_eaten():
             reward = 10
             self.points += 1
         pygame.display.update()
@@ -115,7 +117,27 @@ class Game:
 
         return np.array(state, dtype=np.float32)
 
+    def _draw_apple_coordinates(self):
+        self.apple.x = random.randrange(0, c.WINDOW_WIDTH-1, c.BLOCK_SIZE)
+        self.apple.y = random.randrange(0, c.WINDOW_HEIGHT-1, c.BLOCK_SIZE)
+
+    def reset_apple(self):
+        self._draw_apple_coordinates()
+        if self.snake is not None:
+            while any((self.apple.x == x and self.apple.y == y) 
+                      for x, y in self.snake.points):
+                self._draw_apple_coordinates()
+
+    def snake_has_eaten(self):
+        if self.apple.x == self.snake.head.x and self.apple.y == self.snake.head.y:
+            self.snake.grow()
+            self.snake.total_moves = 0
+            self.reset_apple()
+            return True
+        return False
+
     def main_loop(self):
+        """Used for single-player game"""
         direction = self.snake.direction
         while True:
             for event in pygame.event.get():

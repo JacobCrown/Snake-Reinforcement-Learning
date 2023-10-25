@@ -11,15 +11,12 @@ def train(agent: Agent, num_games: int):
 
         final_move = game.convert_move_to_direction(move)
 
-        # perform move and get new state
         state_new, reward, game_over, score = game.play_step(final_move)
 
-        # remember
         agent.remember(state_old, move, reward, state_new, game_over)
         state_old = state_new
 
         if game_over:
-            # train long memory, plot result
             game.reset()
             agent.n_games += 1
             agent.train()
