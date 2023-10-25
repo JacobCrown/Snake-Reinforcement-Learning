@@ -7,7 +7,7 @@ from model import QTrainer
 from constants import MODELS_DIRPATH
 
 def load_model_decorator(func):
-    def wrapper(self: AgentInterface, *args, **kwargs):
+    def wrapper(self: "AgentInterface", *args, **kwargs):
         if not self.LOAD_MODEL:
             return func(self, *args, **kwargs)
 
@@ -45,8 +45,7 @@ class AgentInterface:
         self._assert_class_vars_set()
 
         self.n_games = 0
-        self.gamma = 0.9 
-        self.trainer = QTrainer(self.MODEL, lr=self.LR, gamma=self.gamma,
+        self.trainer = QTrainer(self.MODEL, lr=self.LR, gamma=self.GAMMA,
                                 batch_size=self.BATCH_SIZE)
         self.mem_cntr = 0
 
