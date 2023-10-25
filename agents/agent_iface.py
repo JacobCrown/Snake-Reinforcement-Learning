@@ -6,6 +6,12 @@ from typing import Optional
 from model import QTrainer
 from constants import MODELS_DIRPATH
 
+def load_model_decorator(func):
+    def wrapper(self, *args, **kwargs):
+        if not self.LOAD_MODEL:
+            return func(self, *args, **kwargs)
+
+    return wrapper
 
 class AgentInterface:
     '''Interface for different agent management'''
@@ -30,6 +36,9 @@ class AgentInterface:
 
     # Name for saving model
     SAVE_MODEL_NAME: Optional[str] = None
+
+    # When you want to start playing from loaded model, set in child class to True
+    LOAD_MODEL: bool = False
 
 
     def __init__(self):
@@ -56,8 +65,7 @@ class AgentInterface:
         assert self.MODEL is not None
         assert self.SAVE_MODEL_NAME is not None
         
-        
-
+    @load_model_decorator
     def remember(self, state, action, reward, next_state, game_over):
         idx = self.mem_cntr % self.MAX_MEMORY
         self.state_memory[idx] = state
@@ -68,6 +76,7 @@ class AgentInterface:
 
         self.mem_cntr += 1
 
+    @load_model_decorator
     def train(self):
         if self.mem_cntr < self.BATCH_SIZE:
             return
@@ -84,18 +93,23 @@ class AgentInterface:
         self.trainer.train_step(state_batch, action_batch, reward_batch, \
                                 next_state_batch, terminal_batch)
 
-    def get_action(self, state) -> int:
-        self.epsilon = 200 - self.n_games
-        move = 0 # 0 - left, 1 - straight, 2 - right
-        if random.randint(0, 200) < self.epsilon:
-            move = random.randint(0, 2)
-        else:
-            state_t = torch.tensor(state, dtype=torch.float32)
-            prediction = self.MODEL(state_t.unsqueeze(0))
-            move = int(torch.argmax(prediction).item())
+    def _predict(self, state) -> int:
+        state_t = torch.tensor(state, dtype=torch.float32)
+        prediction = self.MODEL(state_t.unsqueeze(0))
+        return int(torch.argmax(prediction).item())
+        
 
-        return move
+    def get_action(self, state) -> int:
+        self.epsilon = -1 if self.LOAD_MODEL else 200 - self.n_games
+        if random.randint(0, 200) < self.epsilon:
+            return random.randint(0, 2)
+        return self._predict(state)
     
     def save_model(self):
         MODELS_DIRPATH.mkdir(exist_ok=True)
         torch.save(self.MODEL.state_dict(), MODELS_DIRPATH / self.SAVE_MODEL_NAME)   
+
+    def load_model(self):
+        model_path = MODELS_DIRPATH / self.SAVE_MODEL_NAME
+        assert model_path.exists()
+        self.MODEL.load_state_dict(torch.load(MODELS_DIRPATH / self.SAVE_MODEL_NAME))
