@@ -97,17 +97,23 @@ class Game:
         dir_d = self.snake.direction == c.Direction.DOWN
 
         state = [
-            # Danger up
-            self.snake.is_collision(point_u),
-
-            # Danger down
-            self.snake.is_collision(point_d),
+            # Danger straight
+            (dir_r and self.snake.is_collision(point_r)) or 
+            (dir_l and self.snake.is_collision(point_l)) or 
+            (dir_u and self.snake.is_collision(point_u)) or 
+            (dir_d and self.snake.is_collision(point_d)),
 
             # Danger right
-            self.snake.is_collision(point_r),
+            (dir_u and self.snake.is_collision(point_r)) or 
+            (dir_d and self.snake.is_collision(point_l)) or 
+            (dir_l and self.snake.is_collision(point_u)) or 
+            (dir_r and self.snake.is_collision(point_d)),
 
             # Danger left
-            self.snake.is_collision(point_l),
+            (dir_d and self.snake.is_collision(point_r)) or 
+            (dir_u and self.snake.is_collision(point_l)) or 
+            (dir_r and self.snake.is_collision(point_u)) or 
+            (dir_l and self.snake.is_collision(point_d)),
             
             # Move direction
             dir_l,

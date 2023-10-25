@@ -7,6 +7,6 @@ class Agent(AgentInterface):
     BATCH_SIZE = 1000
     LR = 0.001
     GAMMA = 0.9
-    INPUT_DIM = 12
+    INPUT_DIM = 11
     MODEL = Linear_QNet(INPUT_DIM, 256, 3)
 
