@@ -28,7 +28,9 @@ def train(agent: Agent, num_games: int):
 
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)
 
+    agent.save_model()
+
 if __name__ == '__main__':
     agent = Agent()
-    num_games = 200
+    num_games = 10
     train(agent, num_games)

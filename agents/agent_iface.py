@@ -4,6 +4,7 @@ import numpy as np
 from typing import Optional
 
 from model import QTrainer
+from constants import MODELS_DIRPATH
 
 
 class AgentInterface:
@@ -26,6 +27,9 @@ class AgentInterface:
 
     # NN model
     MODEL = None
+
+    # Name for saving model
+    SAVE_MODEL_NAME: Optional[str] = None
 
 
     def __init__(self):
@@ -50,6 +54,8 @@ class AgentInterface:
         assert isinstance(self.INPUT_DIM, int)
         assert self.GAMMA is not None
         assert self.MODEL is not None
+        assert self.SAVE_MODEL_NAME is not None
+        
         
 
     def remember(self, state, action, reward, next_state, game_over):
@@ -90,3 +96,6 @@ class AgentInterface:
 
         return move
     
+    def save_model(self):
+        MODELS_DIRPATH.mkdir(exist_ok=True)
+        torch.save(self.MODEL.state_dict(), MODELS_DIRPATH / self.SAVE_MODEL_NAME)   

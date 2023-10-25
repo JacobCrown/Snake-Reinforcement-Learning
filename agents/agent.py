@@ -9,4 +9,5 @@ class Agent(AgentInterface):
     GAMMA = 0.9
     INPUT_DIM = 11
     MODEL = Linear_QNet(INPUT_DIM, 256, 3)
+    SAVE_MODEL_NAME = "simple_model.pt"
 
