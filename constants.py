@@ -15,7 +15,7 @@ APPLE_COLOR = (240, 0, 0)
 BACKGROUND_COLOR = (0, 0, 0)
 TEXT_COLOR = (0, 0, 240)
 
-FPS = 30
+FPS = 60
 
 MODELS_DIRPATH = Path(".models")
 

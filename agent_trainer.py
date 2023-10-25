@@ -1,8 +1,8 @@
-from agents.agent import Agent
+from agents import *
 from game import Game
 
 
-def train(agent: Agent, num_games: int):
+def train(agent: SimpleAgent, num_games: int):
     record = 0
     game = Game()
     state_old = game.get_current_state()
@@ -28,9 +28,8 @@ def train(agent: Agent, num_games: int):
 
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)
 
-    agent.save_model()
-
 if __name__ == '__main__':
-    agent = Agent()
-    num_games = 10
+    num_games = 200
+    agent = SimpleAgent()
     train(agent, num_games)
+    agent.save_model()

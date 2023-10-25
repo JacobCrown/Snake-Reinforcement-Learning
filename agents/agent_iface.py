@@ -7,7 +7,7 @@ from model import QTrainer
 from constants import MODELS_DIRPATH
 
 def load_model_decorator(func):
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self: AgentInterface, *args, **kwargs):
         if not self.LOAD_MODEL:
             return func(self, *args, **kwargs)
 
