@@ -2,7 +2,7 @@ import numpy as np
 
 import constants as c
 from agents.agent_iface import AgentInterface
-from model import Linear_QNet
+from models.simple_model import Linear_QNet
 from game import Game
 
 

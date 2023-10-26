@@ -3,7 +3,7 @@ import torch
 import numpy as np
 from typing import Optional
 
-from model import QTrainer
+from models.dqn_trainer import DQN_Trainer
 from constants import MODELS_DIRPATH
 
 def load_model_decorator(func):
@@ -47,7 +47,7 @@ class AgentInterface:
         self.n_games = 0
         if self.LOAD_MODEL:
             self.load_model()
-        self.trainer = QTrainer(self.MODEL, lr=self.LR, gamma=self.GAMMA,
+        self.trainer = DQN_Trainer(self.MODEL, lr=self.LR, gamma=self.GAMMA,
                                 batch_size=self.BATCH_SIZE)
         self.mem_cntr = 0
 
