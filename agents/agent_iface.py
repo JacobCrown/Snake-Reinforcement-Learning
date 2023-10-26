@@ -45,6 +45,8 @@ class AgentInterface:
         self._assert_class_vars_set()
 
         self.n_games = 0
+        if self.LOAD_MODEL:
+            self.load_model()
         self.trainer = QTrainer(self.MODEL, lr=self.LR, gamma=self.GAMMA,
                                 batch_size=self.BATCH_SIZE)
         self.mem_cntr = 0
@@ -104,6 +106,7 @@ class AgentInterface:
             return random.randint(0, 2)
         return self._predict(state)
     
+    @load_model_decorator
     def save_model(self):
         MODELS_DIRPATH.mkdir(exist_ok=True)
         torch.save(self.MODEL.state_dict(), MODELS_DIRPATH / self.SAVE_MODEL_NAME)   
