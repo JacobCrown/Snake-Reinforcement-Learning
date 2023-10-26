@@ -115,3 +115,7 @@ class AgentInterface:
         model_path = MODELS_DIRPATH / self.SAVE_MODEL_NAME
         assert model_path.exists()
         self.MODEL.load_state_dict(torch.load(MODELS_DIRPATH / self.SAVE_MODEL_NAME))
+
+    def get_current_state(self) -> np.ndarray: 
+        '''Method must be overwritten in child class'''
+        raise NotImplementedError

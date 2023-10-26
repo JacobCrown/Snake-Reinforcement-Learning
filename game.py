@@ -69,7 +69,7 @@ class Game:
         self.snake.draw(self.board)
         self._update_screen_with_borders()
 
-    def play_step(self, direction: c.Direction) -> Tuple[np.ndarray, int, bool, int]:
+    def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
         reward = 0
         game_over = False
 
@@ -90,53 +90,7 @@ class Game:
         pygame.display.update()
         self.clock.tick(c.FPS)
         
-        return self.get_current_state(), reward, game_over, self.points
-
-    def get_current_state(self):
-        head = self.snake.head
-        point_l = c.Point(head.x - 20, head.y)
-        point_r = c.Point(head.x + 20, head.y)
-        point_u = c.Point(head.x, head.y - 20)
-        point_d = c.Point(head.x, head.y + 20)
-        
-        dir_l = self.snake.direction == c.Direction.LEFT
-        dir_r = self.snake.direction == c.Direction.RIGHT
-        dir_u = self.snake.direction == c.Direction.UP
-        dir_d = self.snake.direction == c.Direction.DOWN
-
-        state = [
-            # Danger straight
-            (dir_r and self.snake.is_collision(point_r)) or 
-            (dir_l and self.snake.is_collision(point_l)) or 
-            (dir_u and self.snake.is_collision(point_u)) or 
-            (dir_d and self.snake.is_collision(point_d)),
-
-            # Danger right
-            (dir_u and self.snake.is_collision(point_r)) or 
-            (dir_d and self.snake.is_collision(point_l)) or 
-            (dir_l and self.snake.is_collision(point_u)) or 
-            (dir_r and self.snake.is_collision(point_d)),
-
-            # Danger left
-            (dir_d and self.snake.is_collision(point_r)) or 
-            (dir_u and self.snake.is_collision(point_l)) or 
-            (dir_r and self.snake.is_collision(point_u)) or 
-            (dir_l and self.snake.is_collision(point_d)),
-            
-            # Move direction
-            dir_l,
-            dir_r,
-            dir_u,
-            dir_d,
-            
-            # Food location 
-            self.apple.x < head.x,  # food left
-            self.apple.x > head.x,  # food right
-            self.apple.y < head.y,  # food up
-            self.apple.y > head.y  # food down
-            ]
-
-        return np.array(state, dtype=np.float32)
+        return reward, game_over, self.points
 
     def _draw_apple_coordinates(self):
         self.apple.x = random.randrange(0, c.BOARD_WIDTH-1, c.BLOCK_SIZE)
@@ -181,6 +135,6 @@ class Game:
                         pygame.quit()
                         sys.exit()
             
-            _, _, game_over, _ = self.play_step(direction)
+            _, game_over, _ = self.play_step(direction)
             if game_over:
                 break

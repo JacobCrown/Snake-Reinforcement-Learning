@@ -5,7 +5,7 @@ from game import Game
 def train(agent: SimpleAgent, num_games: int):
     record = 0
     game = Game()
-    state_old = game.get_current_state()
+    state_old = agent.get_current_state(game)
     for _ in range(num_games):
         game_over = False
         while not game_over:
@@ -13,7 +13,9 @@ def train(agent: SimpleAgent, num_games: int):
 
             final_move = game.convert_move_to_direction(move)
 
-            state_new, reward, game_over, score = game.play_step(final_move)
+            reward, game_over, score = game.play_step(final_move)
+             
+            state_new = agent.get_current_state(game)
 
             agent.remember(state_old, move, reward, state_new, game_over)
             state_old = state_new
