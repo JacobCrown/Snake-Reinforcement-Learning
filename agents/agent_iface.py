@@ -1,7 +1,7 @@
 import random
 import torch
 import numpy as np
-from typing import Optional
+from typing import Optional, Tuple
 
 from models.dqn_trainer import DQN_Trainer
 from constants import MODELS_DIRPATH
@@ -26,7 +26,7 @@ class AgentInterface:
     LR: Optional[float] = None
 
     # States how many inputs neural network should have
-    INPUT_DIM: Optional[int] = None
+    INPUT_DIMS: Optional[Tuple[int]] = None
 
     # Future reward parameter
     GAMMA: Optional[float] = None
@@ -51,17 +51,17 @@ class AgentInterface:
                                 batch_size=self.BATCH_SIZE)
         self.mem_cntr = 0
 
-        self.state_memory = np.zeros((self.MAX_MEMORY, self.INPUT_DIM), dtype=np.float32)
-        self.new_state_memory = np.zeros((self.MAX_MEMORY, self.INPUT_DIM), dtype=np.float32)
+        self.state_memory = np.zeros((self.MAX_MEMORY, *self.INPUT_DIMS), dtype=np.float32)
+        self.new_state_memory = np.zeros((self.MAX_MEMORY, *self.INPUT_DIMS), dtype=np.float32)
         self.action_memory = np.zeros((self.MAX_MEMORY), dtype=np.int32)
         self.reward_memory = np.zeros((self.MAX_MEMORY), dtype=np.float32)
         self.terminal_memory = np.zeros((self.MAX_MEMORY), dtype=bool)
 
     def _assert_class_vars_set(self):
-        assert isinstance(self.MAX_MEMORY, int)
+        assert self.MAX_MEMORY is not None
         assert self.BATCH_SIZE is not None
         assert self.LR is not None
-        assert isinstance(self.INPUT_DIM, int)
+        assert self.INPUT_DIMS is not None
         assert self.GAMMA is not None
         assert self.MODEL is not None
         assert self.SAVE_MODEL_NAME is not None

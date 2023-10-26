@@ -2,7 +2,6 @@ import random
 import sys
 from typing import Tuple
 
-import numpy as np
 import pygame
 
 import constants as c
@@ -64,7 +63,7 @@ class Game:
     def update_screen(self, direction: c.Direction):
         self.snake.direction = direction
         self.board.fill(c.BACKGROUND_COLOR)
-        self.snake.update()
+        self.snake.update(direction)
         self.apple.draw(self.board)
         self.snake.draw(self.board)
         self._update_screen_with_borders()

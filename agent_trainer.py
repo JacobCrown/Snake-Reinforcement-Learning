@@ -1,8 +1,13 @@
+from typing import Union
+
 from agents import *
 from game import Game
 
 
-def train(agent: SimpleAgent, num_games: int):
+OneOfAgent = Union[SimpleAgent, ConvAgent]
+
+
+def train(agent: OneOfAgent, num_games: int):
     record = 0
     game = Game()
     state_old = agent.get_current_state(game)
@@ -32,6 +37,7 @@ def train(agent: SimpleAgent, num_games: int):
 
 if __name__ == '__main__':
     num_games = 100
-    agent = SimpleAgent()
+    # agent = SimpleAgent()
+    agent = ConvAgent()
     train(agent, num_games)
     agent.save_model()

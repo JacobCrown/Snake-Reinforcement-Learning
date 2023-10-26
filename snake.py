@@ -3,7 +3,7 @@ from typing import Optional
 import pygame
 
 from constants import Direction, BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
-                      Point
+                      Point, HEAD_COLOR
 
 
 class Snake():
@@ -16,7 +16,8 @@ class Snake():
         self.head = self.points[0]
         self.total_moves = 0
 
-    def update(self) -> None:
+    def update(self, direction: Direction) -> None:
+        self.direction = direction
         self.points.pop()
         point = self._move_snake()
         
@@ -40,8 +41,10 @@ class Snake():
         return point
 
     def draw(self, surf: pygame.Surface):
-        for p in self.points:
-            pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE), 2)
+        pygame.draw.rect(surf, HEAD_COLOR, (self.head.x, self.head.y,
+                                             BLOCK_SIZE, BLOCK_SIZE))
+        for p in self.points[1:]:
+            pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE))
 
     def _check_collision_with_walls(self, x: int, y: int) -> bool:
         if x < 0 or x >= BOARD_WIDTH:
