@@ -23,7 +23,7 @@ TEXT_COLOR = (0, 0, 240)
 BORDER_COLOR = (0, 32, 102)
 HEAD_COLOR = (255, 255, 0)
 
-FPS = 15
+FPS = 60
 
 MODELS_DIRPATH = Path(".models")
 
