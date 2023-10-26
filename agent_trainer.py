@@ -29,7 +29,7 @@ def train(agent: SimpleAgent, num_games: int):
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)
 
 if __name__ == '__main__':
-    num_games = 200
+    num_games = 100
     agent = SimpleAgent()
     train(agent, num_games)
     agent.save_model()

@@ -2,14 +2,14 @@ from typing import Optional
 
 import pygame
 
-from constants import Direction, WINDOW_HEIGHT, WINDOW_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
+from constants import Direction, BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
                       Point
 
 
 class Snake():
     def __init__(self):
         self.direction = Direction.RIGHT
-        half_w, half_h = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2
+        half_w, half_h = BOARD_WIDTH // 2, BOARD_HEIGHT // 2
         self.points = [Point(half_w, half_h), Point(half_w - BLOCK_SIZE, half_h),
                        Point(half_w - 2*BLOCK_SIZE, half_h)]
         self.speed = BLOCK_SIZE
@@ -44,9 +44,9 @@ class Snake():
             pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE), 2)
 
     def _check_collision_with_walls(self, x: int, y: int) -> bool:
-        if x < 0 or x >= WINDOW_WIDTH:
+        if x < 0 or x >= BOARD_WIDTH:
             return True
-        elif y < 0 or y >= WINDOW_HEIGHT:
+        elif y < 0 or y >= BOARD_HEIGHT:
             return True
         return False
 

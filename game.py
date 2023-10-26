@@ -15,7 +15,8 @@ class Game:
         pygame.init()
         pygame.display.set_caption('Snake Reinforcement Learning')
 
-        self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT))
+        self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT + 100))
+        self.board = pygame.Surface((c.BOARD_WIDTH, c.BOARD_HEIGHT))
         
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font("freesansbold.ttf", 32)
@@ -53,13 +54,20 @@ class Game:
         direction = self._change_direction_from_int(move)
         return direction
 
+    def _update_screen_with_borders(self):
+        self.screen.fill(c.BACKGROUND_COLOR)
+        pygame.draw.rect(self.screen, c.BORDER_COLOR, (0, 100,
+                        c.WINDOW_WIDTH, c.WINDOW_HEIGHT), c.BLOCK_SIZE)
+        self.screen.blit(self.board, (c.BLOCK_SIZE, 100 + c.BLOCK_SIZE))
+        self._print_points()
+
     def update_screen(self, direction: c.Direction):
         self.snake.direction = direction
-        self.screen.fill(c.BACKGROUND_COLOR)
+        self.board.fill(c.BACKGROUND_COLOR)
         self.snake.update()
-        self._print_points()
-        self.apple.draw(self.screen)
-        self.snake.draw(self.screen)
+        self.apple.draw(self.board)
+        self.snake.draw(self.board)
+        self._update_screen_with_borders()
 
     def play_step(self, direction: c.Direction) -> Tuple[np.ndarray, int, bool, int]:
         reward = 0
@@ -131,8 +139,8 @@ class Game:
         return np.array(state, dtype=np.float32)
 
     def _draw_apple_coordinates(self):
-        self.apple.x = random.randrange(0, c.WINDOW_WIDTH-1, c.BLOCK_SIZE)
-        self.apple.y = random.randrange(0, c.WINDOW_HEIGHT-1, c.BLOCK_SIZE)
+        self.apple.x = random.randrange(0, c.BOARD_WIDTH-1, c.BLOCK_SIZE)
+        self.apple.y = random.randrange(0, c.BOARD_HEIGHT-1, c.BLOCK_SIZE)
 
     def reset_apple(self):
         self._draw_apple_coordinates()

@@ -10,5 +10,5 @@ class SimpleAgent(AgentInterface):
     INPUT_DIM = 11
     MODEL = Linear_QNet(INPUT_DIM, 512, 3)
     SAVE_MODEL_NAME = "simple_model.pt"
-    LOAD_MODEL = False
+    LOAD_MODEL = True
 
