@@ -1,6 +1,8 @@
+import os
 import random
 import sys
 from typing import Tuple
+import numpy as np
 
 import pygame
 
@@ -8,6 +10,7 @@ import constants as c
 from snake import Snake
 from apple import Apple
 
+os.environ['SDL_VIDEO_WINDOW_POS'] = "2500,200"
 
 class Game:
     def __init__(self) -> None:
@@ -109,6 +112,21 @@ class Game:
             self.reset_apple()
             return True
         return False
+
+    def get_board_pixels(self) -> np.ndarray:
+        """Method for obtaining pixel values from board in CxHxW format"""
+        arr = np.zeros((3, c.BOARD_BLOCK_HEIGHT, c.BOARD_BLOCK_WIDTH)).astype("uint8")
+
+        # draw snake
+        arr[:,self.snake.head.y // c.BLOCK_SIZE, self.snake.head.x // c.BLOCK_SIZE] \
+                                                                    = c.HEAD_COLOR
+        for p in self.snake.points[1:]:
+            arr[:,p.y // c.BLOCK_SIZE, p.x // c.BLOCK_SIZE] = c.SNAKE_COLOR
+
+        # draw apple
+        arr[:,self.apple.y // c.BLOCK_SIZE, self.apple.x // c.BLOCK_SIZE] = c.APPLE_COLOR
+
+        return arr
 
     def main_loop(self):
         """Used for single-player game"""
