@@ -100,7 +100,7 @@ class AgentInterface:
         return int(torch.argmax(prediction).item())
 
     def get_action(self, state) -> int:
-        self.epsilon = -1 if self.LOAD_MODEL else 0 - self.n_games
+        self.epsilon = -1 if self.LOAD_MODEL else 200 - self.n_games
         if random.randint(0, 200) < self.epsilon:
             return random.randint(0, 2)
         return self._predict(state)
