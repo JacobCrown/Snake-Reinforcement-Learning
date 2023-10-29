@@ -1,5 +1,4 @@
 from typing import Union
-import time
 
 from agents import *
 from game import Game
@@ -21,7 +20,6 @@ def train(agent: OneOfAgent, num_games: int):
 
             reward, game_over, score = game.play_step(final_move)
              
-            time.sleep(0.01)
             state_new = agent.get_current_state(game)
 
             agent.remember(state_old, move, reward, state_new, game_over)
@@ -38,7 +36,7 @@ def train(agent: OneOfAgent, num_games: int):
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)
 
 if __name__ == '__main__':
-    num_games = 100
+    num_games = 500
     # agent = SimpleAgent()
     agent = ConvAgent()
     train(agent, num_games)

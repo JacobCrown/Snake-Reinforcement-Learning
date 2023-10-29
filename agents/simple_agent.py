@@ -14,7 +14,7 @@ class SimpleAgent(AgentInterface):
     INPUT_DIMS = (11,)
     MODEL = Linear_QNet(INPUT_DIMS, 512, 3)
     SAVE_MODEL_NAME = "simple_model.pt"
-    LOAD_MODEL = False
+    LOAD_MODEL = True
 
     def get_current_state(self, game: Game) -> np.ndarray:
         head = game.snake.head

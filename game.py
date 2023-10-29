@@ -115,8 +115,12 @@ class Game:
 
     def get_board_pixels(self) -> np.ndarray:
         """Method for obtaining pixel values from board in CxHxW format"""
-        arr = np.zeros((3, c.BOARD_BLOCK_HEIGHT + 2, c.BOARD_BLOCK_WIDTH + 2)) \
+        arr = np.zeros((3, c.BOARD_BLOCK_HEIGHT, c.BOARD_BLOCK_WIDTH)) \
                                                                 .astype("uint8")
+
+        # draw walls
+        arr = np.array([np.pad(arr[i], 1, constant_values=color) for i, color in
+                        enumerate(c.BORDER_COLOR)])
 
         # draw snake
         arr[:,self.snake.head.y // c.BLOCK_SIZE + 1, self.snake.head.x // c.BLOCK_SIZE + 1] \
