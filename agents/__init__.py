@@ -1,2 +1,3 @@
 from agents.simple_agent import SimpleAgent
+from agents.simple_agent_extended import SimpleAgentExtended
 from agents.conv_agent import ConvAgent

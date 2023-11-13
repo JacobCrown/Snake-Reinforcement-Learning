@@ -10,7 +10,7 @@ import constants as c
 from snake import Snake
 from apple import Apple
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "2500,200"
+os.environ['SDL_VIDEO_WINDOW_POS'] = "1500,200"
 
 class Game:
     def __init__(self) -> None:
