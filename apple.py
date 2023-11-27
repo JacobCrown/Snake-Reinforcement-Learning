@@ -9,4 +9,5 @@ class Apple():
         self.y = 0
 
     def draw(self, surf: pygame.Surface):
-        pygame.draw.rect(surf, APPLE_COLOR, (self.x, self.y, BLOCK_SIZE, BLOCK_SIZE))
+        pygame.draw.rect(surf, APPLE_COLOR, (self.x * BLOCK_SIZE, self.y * BLOCK_SIZE,
+                                             BLOCK_SIZE, BLOCK_SIZE))

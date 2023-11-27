@@ -2,17 +2,17 @@ from typing import Optional
 
 import pygame
 
-from constants import Direction, BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
+from constants import Direction, BOARD_BLOCK_HEIGHT, BOARD_BLOCK_WIDTH, BLOCK_SIZE, SNAKE_COLOR, \
                       Point, HEAD_COLOR
 
 
 class Snake():
     def __init__(self):
         self.direction = Direction.RIGHT
-        half_w, half_h = BOARD_WIDTH // 2, BOARD_HEIGHT // 2
-        self.points = [Point(half_w, half_h), Point(half_w - BLOCK_SIZE, half_h),
-                       Point(half_w - 2*BLOCK_SIZE, half_h)]
-        self.speed = BLOCK_SIZE
+        half_w, half_h = BOARD_BLOCK_WIDTH // 2, BOARD_BLOCK_HEIGHT // 2
+        self.points = [Point(half_w, half_h), Point(half_w - 1, half_h),
+                       Point(half_w - 2, half_h)]
+        self.speed = 1
         self.head = self.points[0]
         self.total_moves = 0
 
@@ -41,15 +41,16 @@ class Snake():
         return point
 
     def draw(self, surf: pygame.Surface):
-        pygame.draw.rect(surf, HEAD_COLOR, (self.head.x, self.head.y,
+        pygame.draw.rect(surf, HEAD_COLOR, (self.head.x * BLOCK_SIZE, self.head.y * BLOCK_SIZE,
                                              BLOCK_SIZE, BLOCK_SIZE))
         for p in self.points[1:]:
-            pygame.draw.rect(surf, SNAKE_COLOR, (p.x, p.y, BLOCK_SIZE, BLOCK_SIZE))
+            pygame.draw.rect(surf, SNAKE_COLOR, (p.x * BLOCK_SIZE, p.y * BLOCK_SIZE,
+                                                 BLOCK_SIZE, BLOCK_SIZE))
 
     def _check_collision_with_walls(self, x: int, y: int) -> bool:
-        if x < 0 or x >= BOARD_WIDTH:
+        if x < 0 or x >= BOARD_BLOCK_WIDTH:
             return True
-        elif y < 0 or y >= BOARD_HEIGHT:
+        elif y < 0 or y >= BOARD_BLOCK_HEIGHT:
             return True
         return False
 

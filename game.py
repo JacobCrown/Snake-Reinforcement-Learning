@@ -10,7 +10,7 @@ import constants as c
 from snake import Snake
 from apple import Apple
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "1500,200"
+os.environ['SDL_VIDEO_WINDOW_POS'] = "2500,200"
 
 class Game:
     def __init__(self) -> None:
@@ -95,8 +95,8 @@ class Game:
         return reward, game_over, self.points
 
     def _draw_apple_coordinates(self):
-        self.apple.x = random.randrange(0, c.BOARD_WIDTH-1, c.BLOCK_SIZE)
-        self.apple.y = random.randrange(0, c.BOARD_HEIGHT-1, c.BLOCK_SIZE)
+        self.apple.x = random.randrange(0, c.BOARD_BLOCK_WIDTH-1)
+        self.apple.y = random.randrange(0, c.BOARD_BLOCK_HEIGHT-1)
 
     def reset_apple(self):
         self._draw_apple_coordinates()
@@ -132,6 +132,20 @@ class Game:
         arr[:,self.apple.y // c.BLOCK_SIZE + 1, self.apple.x // c.BLOCK_SIZE + 1] = c.APPLE_COLOR
 
         return arr
+
+    def obrain_game_as_np_array(self):
+        arr = np.zeros((c.BOARD_BLOCK_HEIGHT, c.BOARD_BLOCK_WIDTH))
+
+        # draw snake
+        arr[self.snake.head.y, self.snake.head.x] = 2
+        for p in self.snake.points[1:]:
+            arr[p.y, p.x] = 1
+
+        # draw apple
+        arr[self.apple.y, self.apple.x] = 9
+
+        return arr
+        
 
     def main_loop(self):
         """Used for single-player game"""
