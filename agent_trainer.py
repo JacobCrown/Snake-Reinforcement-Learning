@@ -2,7 +2,6 @@ from typing import Union
 
 from agents import *
 from game import Game
-from constants import Direction
 
 
 OneOfAgent = Union[SimpleAgent, ConvAgent, SimpleAgentExtended]
@@ -15,12 +14,9 @@ def train(agent: OneOfAgent, num_games: int):
     for _ in range(num_games):
         game_over = False
         while not game_over:
-            # print()
             move = agent.get_action(state_old)
 
             final_move = game.convert_move_to_direction(move)
-
-            # print(f"Making move: {final_move.name}")
 
             reward, game_over, score = game.play_step(final_move)
              
@@ -38,15 +34,12 @@ def train(agent: OneOfAgent, num_games: int):
                     record = score
 
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)
-                breakpoint()
-            print("Game state:")
-            print(game.obrain_game_as_np_array())
 
 
 if __name__ == '__main__':
-    num_games = 500
-    # agent = SimpleAgent()
-    agent = SimpleAgentExtended()
+    num_games = 300
+    agent = SimpleAgent()
+    # agent = SimpleAgentExtended()
     # agent = ConvAgent()
     train(agent, num_games)
     agent.save_model()

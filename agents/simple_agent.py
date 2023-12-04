@@ -7,14 +7,14 @@ from game import Game
 
 
 class SimpleAgent(AgentInterface):
-    MAX_MEMORY = 1_000_000
-    BATCH_SIZE = 10_000
-    LR = 1e-4
-    GAMMA = 0.99
+    MAX_MEMORY = 100_000
+    BATCH_SIZE = 1000
+    LR = 0.001
+    GAMMA = 0.9
     INPUT_DIMS = (11,)
-    MODEL = Linear_QNet(INPUT_DIMS, 512, 3)
+    MODEL = Linear_QNet(INPUT_DIMS, 256, 3)
     SAVE_MODEL_NAME = "simple_model.pt"
-    LOAD_MODEL = True
+    LOAD_MODEL = False
 
     def get_current_state(self, game: Game) -> np.ndarray:
         head = game.snake.head

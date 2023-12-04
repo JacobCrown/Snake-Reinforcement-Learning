@@ -72,21 +72,21 @@ class Game:
         self._update_screen_with_borders()
 
     def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
-        reward = 0
+        reward = -1
         game_over = False
 
         self.update_screen(direction)
 
         if self.snake.check_for_collision():
-            reward = -10
+            reward = -30
             game_over = True
 
         if self.snake.total_moves > self.stale_moves_threshold:
-            reward = -10
+            reward = -30
             game_over = True
             
         if self.snake_has_eaten():
-            reward = 10
+            reward = 30
             self.points += 1
 
         pygame.display.update()
