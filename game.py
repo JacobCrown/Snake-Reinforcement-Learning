@@ -64,7 +64,7 @@ class Game:
         self.screen.blit(self.board, (c.BLOCK_SIZE, 100 + c.BLOCK_SIZE))
         self._print_points()
 
-    def update_screen(self, direction: c.Direction):
+    def update_screen(self):
         self.board.fill(c.BACKGROUND_COLOR)
         self.apple.draw(self.board)
         self.snake.draw(self.board)
@@ -78,7 +78,7 @@ class Game:
 
         self.snake.update(direction)
         if c.SHOW_GAME:
-            self.update_screen(direction)
+            self.update_screen()
 
         if self.snake.check_for_collision():
             reward = -30

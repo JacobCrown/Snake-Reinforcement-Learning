@@ -8,20 +8,20 @@ from game import Game
 
 class SimpleAgent(AgentInterface):
     MAX_MEMORY = 100_000
-    BATCH_SIZE = 1000
+    BATCH_SIZE = 500
     LR = 0.001
     GAMMA = 0.9
     INPUT_DIMS = (11,)
-    MODEL = Linear_QNet(INPUT_DIMS, 256, 3)
+    MODEL = Linear_QNet(INPUT_DIMS, 512, 3)
     SAVE_MODEL_NAME = "simple_model.pt"
     LOAD_MODEL = False
 
     def get_current_state(self, game: Game) -> np.ndarray:
         head = game.snake.head
-        point_l = c.Point(head.x - 20, head.y)
-        point_r = c.Point(head.x + 20, head.y)
-        point_u = c.Point(head.x, head.y - 20)
-        point_d = c.Point(head.x, head.y + 20)
+        point_l = c.Point(head.x - 1, head.y)
+        point_r = c.Point(head.x + 1, head.y)
+        point_u = c.Point(head.x, head.y - 1)
+        point_d = c.Point(head.x, head.y + 1)
         
         dir_l = game.snake.direction == c.Direction.LEFT
         dir_r = game.snake.direction == c.Direction.RIGHT

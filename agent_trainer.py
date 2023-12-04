@@ -37,7 +37,7 @@ def train(agent: OneOfAgent, num_games: int):
 
 
 if __name__ == '__main__':
-    num_games = 300
+    num_games = 500
     agent = SimpleAgent()
     # agent = SimpleAgentExtended()
     # agent = ConvAgent()
