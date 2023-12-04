@@ -10,18 +10,19 @@ import constants as c
 from snake import Snake
 from apple import Apple
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "2500,200"
 
 class Game:
     def __init__(self) -> None:
-        pygame.init()
-        pygame.display.set_caption('Snake Reinforcement Learning')
+        if c.SHOW_GAME:
+            pygame.init()
+            pygame.display.set_caption('Snake Reinforcement Learning')
 
-        self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT + 100))
-        self.board = pygame.Surface((c.BOARD_WIDTH, c.BOARD_HEIGHT))
-        
-        self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font("freesansbold.ttf", 32)
+            self.screen = pygame.display.set_mode((c.WINDOW_WIDTH, c.WINDOW_HEIGHT + 100))
+            self.board = pygame.Surface((c.BOARD_WIDTH, c.BOARD_HEIGHT))
+            
+            self.clock = pygame.time.Clock()
+            self.font = pygame.font.Font("freesansbold.ttf", 32)
+            os.environ['SDL_VIDEO_WINDOW_POS'] = "2500,200"
         self.stale_moves_threshold = 150
         self.reset()
 
@@ -64,18 +65,20 @@ class Game:
         self._print_points()
 
     def update_screen(self, direction: c.Direction):
-        self.snake.direction = direction
         self.board.fill(c.BACKGROUND_COLOR)
-        self.snake.update(direction)
         self.apple.draw(self.board)
         self.snake.draw(self.board)
         self._update_screen_with_borders()
+        pygame.display.update()
+        self.clock.tick(c.FPS)
 
     def play_step(self, direction: c.Direction) -> Tuple[int, bool, int]:
         reward = -1
         game_over = False
 
-        self.update_screen(direction)
+        self.snake.update(direction)
+        if c.SHOW_GAME:
+            self.update_screen(direction)
 
         if self.snake.check_for_collision():
             reward = -30
@@ -89,9 +92,6 @@ class Game:
             reward = 30
             self.points += 1
 
-        pygame.display.update()
-        self.clock.tick(c.FPS)
-        
         return reward, game_over, self.points
 
     def _draw_apple_coordinates(self):
