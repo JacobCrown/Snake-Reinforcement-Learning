@@ -15,6 +15,7 @@ class SimpleAgent(AgentInterface):
     MODEL = Linear_QNet(INPUT_DIMS, 512, 3)
     SAVE_MODEL_NAME = "simple_model.pt"
     LOAD_MODEL = False
+    SAVE_MODEL = False
 
     def get_current_state(self, game: Game) -> np.ndarray:
         head = game.snake.head
@@ -58,7 +59,7 @@ class SimpleAgent(AgentInterface):
             game.apple.x > head.x,  # food right
             game.apple.y < head.y,  # food up
             game.apple.y > head.y  # food down
-            ]
+        ]
 
         return np.array(state, dtype=np.float32)
 

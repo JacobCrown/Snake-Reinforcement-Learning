@@ -36,6 +36,7 @@ class AgentInterface:
 
     # Name for saving model
     SAVE_MODEL_NAME: Optional[str] = None
+    SAVE_MODEL = True
 
     # When you want to start playing from loaded model, set in child class to True
     LOAD_MODEL: bool = False

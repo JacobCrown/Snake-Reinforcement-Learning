@@ -42,4 +42,5 @@ if __name__ == '__main__':
     # agent = SimpleAgentExtended()
     # agent = ConvAgent()
     train(agent, num_games)
-    agent.save_model()
+    if agent.SAVE_MODEL:
+        agent.save_model()
