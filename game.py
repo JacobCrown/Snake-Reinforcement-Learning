@@ -83,10 +83,12 @@ class Game:
         if self.snake.check_for_collision():
             reward = -30
             game_over = True
+            print("COLLISION ...")
 
         if self.snake.total_moves > self.stale_moves_threshold:
             reward = -30
             game_over = True
+            print("STAGNATION ...")
             
         if self.snake_has_eaten():
             reward = 30
@@ -95,8 +97,9 @@ class Game:
         return reward, game_over, self.points
 
     def _draw_apple_coordinates(self):
-        self.apple.x = random.randrange(0, c.BOARD_BLOCK_WIDTH-1)
-        self.apple.y = random.randrange(0, c.BOARD_BLOCK_HEIGHT-1)
+        self.apple.x = random.randrange(0, c.BOARD_BLOCK_WIDTH)
+        self.apple.y = random.randrange(0, c.BOARD_BLOCK_HEIGHT)
+
 
     def reset_apple(self):
         self._draw_apple_coordinates()
@@ -133,16 +136,24 @@ class Game:
 
         return arr
 
-    def obrain_game_as_np_array(self):
+    def obtain_game_as_np_array(self):
         arr = np.zeros((c.BOARD_BLOCK_HEIGHT, c.BOARD_BLOCK_WIDTH))
 
-        # draw snake
-        arr[self.snake.head.y, self.snake.head.x] = 2
-        for p in self.snake.points[1:]:
-            arr[p.y, p.x] = 1
 
-        # draw apple
-        arr[self.apple.y, self.apple.x] = 9
+        try:
+            # draw snake
+            arr[self.snake.head.y, self.snake.head.x] = 2
+            for p in self.snake.points[1:]:
+                arr[p.y, p.x] = 1
+
+            # draw apple
+            arr[self.apple.y, self.apple.x] = 9
+        except IndexError as e:
+            return
+
+        print("BOARD ARRAY: ")
+        print(arr)
+        print()
 
         return arr
         
