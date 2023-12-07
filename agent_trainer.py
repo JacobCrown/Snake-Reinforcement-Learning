@@ -4,7 +4,7 @@ from agents import *
 from game import Game
 
 
-OneOfAgent = Union[SimpleAgent, ConvAgent, SimpleAgentExtended]
+OneOfAgent = Union[SimpleAgent, SimpleAgent_v2, ConvAgent, SimpleAgentExtended]
 
 
 def train(agent: OneOfAgent, num_games: int):
@@ -40,6 +40,7 @@ if __name__ == '__main__':
     num_games = 500
     agent = SimpleAgent()
     # agent = SimpleAgentExtended()
+    # agent = SimpleAgent_v2()
     # agent = ConvAgent()
     train(agent, num_games)
     if agent.SAVE_MODEL:
