@@ -66,6 +66,7 @@ class AgentInterface:
         assert self.GAMMA is not None
         assert self.MODEL is not None
         assert self.SAVE_MODEL_NAME is not None
+        assert self.SAVE_MODEL is not None
         
     @load_model_decorator
     def remember(self, state, action, reward, next_state, game_over):
