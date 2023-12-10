@@ -4,7 +4,8 @@ from agents import *
 from game import Game
 
 
-OneOfAgent = Union[SimpleAgent, SimpleAgent_v2, ConvAgent, SimpleAgentExtended]
+OneOfAgent = Union[SimpleAgent, SimpleAgent_v2, ConvAgent, SimpleAgentExtended,
+                   SimpleAgent4_Outputs]
 
 
 def train(agent: OneOfAgent, num_games: int):
@@ -16,7 +17,9 @@ def train(agent: OneOfAgent, num_games: int):
         while not game_over:
             move = agent.get_action(state_old)
 
-            final_move = game.convert_move_to_direction(move)
+            # final_move = game.convert_move_to_direction(move)
+            # line below is used when network outputs 4 moves
+            final_move = game.fix_move_to_legal_move(move)
 
             reward, game_over, score = game.play_step(final_move)
              
@@ -37,10 +40,11 @@ def train(agent: OneOfAgent, num_games: int):
 
 
 if __name__ == '__main__':
-    num_games = 500
-    agent = SimpleAgent()
-    # agent = SimpleAgentExtended()
+    num_games = 400
+    # agent = SimpleAgent()
     # agent = SimpleAgent_v2()
+    agent = SimpleAgent4_Outputs()
+    # agent = SimpleAgentExtended()
     # agent = ConvAgent()
     train(agent, num_games)
     if agent.SAVE_MODEL:

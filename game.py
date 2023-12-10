@@ -57,6 +57,19 @@ class Game:
         direction = self._change_direction_from_int(move)
         return direction
 
+    def fix_move_to_legal_move(self, move):
+        """`move` - 0 - left, 1 - right, 2 - up, 3 - down"""
+        assert move >= 0 and move <= 3, f"Move `{move}` has to be an integer between 0 and 3"
+        if move == 0 and self.snake.direction == c.Direction.RIGHT:
+            move = 1
+        elif move == 1 and self.snake.direction == c.Direction.LEFT:
+            move = 0
+        elif move == 2 and self.snake.direction == c.Direction.DOWN:
+            move = 3
+        elif move == 3 and self.snake.direction == c.Direction.UP:
+            move = 2
+        return c.Direction(move)
+
     def _update_screen_with_borders(self):
         self.screen.fill(c.BACKGROUND_COLOR)
         pygame.draw.rect(self.screen, c.BORDER_COLOR, (0, 100,
