@@ -41,6 +41,9 @@ class AgentInterface:
     # When you want to start playing from loaded model, set in child class to True
     LOAD_MODEL: bool = False
 
+    # Parameter connected to exploration vs exploitation problem. 
+    MAX_EPS_GAMES = 200
+
 
     def __init__(self):
         self._assert_class_vars_set()
@@ -67,6 +70,7 @@ class AgentInterface:
         assert self.MODEL is not None
         assert self.SAVE_MODEL_NAME is not None
         assert self.SAVE_MODEL is not None
+        assert self.MAX_EPS_GAMES is not None
         
     @load_model_decorator
     def remember(self, state, action, reward, next_state, game_over):
@@ -102,7 +106,7 @@ class AgentInterface:
         return int(torch.argmax(prediction).item())
 
     def get_action(self, state) -> int:
-        self.epsilon = -1 if self.LOAD_MODEL else 200 - self.n_games
+        self.epsilon = -1 if self.LOAD_MODEL else self.MAX_EPS_GAMES - self.n_games
         if random.randint(0, 200) < self.epsilon:
             return random.randint(0, 2)
         return self._predict(state)
